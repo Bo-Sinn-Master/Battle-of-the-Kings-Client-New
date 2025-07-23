@@ -1,0 +1,11 @@
+.main-screen {
+  text-align: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 768px;
+  margin: auto;
+}
+
+button {
+  margin: 10px;
+}
