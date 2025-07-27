@@ -7,7 +7,7 @@ function App() {
   const userId = 123;
 
   useEffect(() => {
-    fetch('https://battle-of-the-kings-server.onrender.com/api', {
+    fetch('http://localhost:8081/api', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id: userId, action: 'get_user', platform: 'web' })
@@ -24,7 +24,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const ws = new WebSocket('wss://battle-of-the-kings-server.onrender.com');
+    const ws = new WebSocket('ws://localhost:8082');
     ws.onopen = () => {
       ws.send(JSON.stringify({ user_id: userId, action: 'pvp_match' }));
     };
@@ -51,7 +51,7 @@ function App() {
           <p>Buildings: {user.buildings?.length ? user.buildings.join(', ') : 'None'}</p>
           <p>Weapons: {user.weapons?.length ? user.weapons.join(', ') : 'None'}</p>
           <button onClick={() => {
-            fetch('https://battle-of-the-kings-server.onrender.com/api', {
+            fetch('http://localhost:8081/api', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ user_id: userId, action: 'build', building: 'mine', platform: 'web' })
@@ -60,7 +60,7 @@ function App() {
               .then(data => alert(JSON.stringify(data)));
           }}>Build Mine</button>
           <button onClick={() => {
-            fetch('https://battle-of-the-kings-server.onrender.com/api', {
+            fetch('http://localhost:8081/api', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ user_id: userId, action: 'buy_weapon', weapon: 'sword', platform: 'web' })
@@ -75,4 +75,4 @@ function App() {
     </div>
   );
 }
-export default App; 
+export default App;
