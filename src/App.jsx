@@ -7,34 +7,50 @@ function App() {
   const userId = 123;
 
   useEffect(() => {
+    console.log('Fetching user data from http://localhost:8081/api');
     fetch('http://localhost:8081/api', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id: userId, action: 'get_user', platform: 'web' })
     })
-      .then(res => res.json())
+      .then(res => {
+        console.log('Fetch response:', res);
+        return res.json();
+      })
       .then(data => {
+        console.log('Fetch data:', data);
         if (data.status === 'success') {
           setUser(data);
         } else {
           setError(data.message || 'Ошибка загрузки данных');
         }
       })
-      .catch(err => setError('Ошибка соединения: ' + err.message));
+      .catch(err => {
+        console.error('Fetch error:', err);
+        setError('Ошибка соединения: ' + err.message);
+      });
   }, []);
 
   useEffect(() => {
+    console.log('Connecting to WebSocket ws://localhost:8082');
     const ws = new WebSocket('ws://localhost:8082');
     ws.onopen = () => {
+      console.log('WebSocket connected');
       ws.send(JSON.stringify({ user_id: userId, action: 'pvp_match' }));
     };
     ws.onmessage = (e) => {
-      console.log('WebSocket:', e.data);
+      console.log('WebSocket message:', e.data);
     };
     ws.onerror = (err) => {
       console.error('WebSocket error:', err);
     };
-    return () => ws.close();
+    ws.onclose = (event) => {
+      console.log('WebSocket closed:', event.code, event.reason);
+    };
+    return () => {
+      console.log('Closing WebSocket');
+      ws.close();
+    };
   }, []);
 
   if (error) {
