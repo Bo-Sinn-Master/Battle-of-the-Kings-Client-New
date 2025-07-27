@@ -7,8 +7,8 @@ function App() {
   const userId = 123;
 
   useEffect(() => {
-    console.log('Fetching user data from http://localhost:8081/api');
-    fetch('http://localhost:8081/api', {
+    console.log('Fetching user data from https://battle-of-the-kings-server.onrender.com/api');
+    fetch('https://battle-of-the-kings-server.onrender.com/api', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id: userId, action: 'get_user', platform: 'web' })
@@ -32,8 +32,8 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log('Connecting to WebSocket ws://localhost:8082');
-    const ws = new WebSocket('ws://localhost:8082');
+    console.log('Connecting to WebSocket wss://battle-of-the-kings-server.onrender.com');
+    const ws = new WebSocket('wss://battle-of-the-kings-server.onrender.com');
     ws.onopen = () => {
       console.log('WebSocket connected');
       ws.send(JSON.stringify({ user_id: userId, action: 'pvp_match' }));
@@ -67,7 +67,7 @@ function App() {
           <p>Buildings: {user.buildings?.length ? user.buildings.join(', ') : 'None'}</p>
           <p>Weapons: {user.weapons?.length ? user.weapons.join(', ') : 'None'}</p>
           <button onClick={() => {
-            fetch('http://localhost:8081/api', {
+            fetch('https://battle-of-the-kings-server.onrender.com/api', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ user_id: userId, action: 'build', building: 'mine', platform: 'web' })
@@ -76,7 +76,7 @@ function App() {
               .then(data => alert(JSON.stringify(data)));
           }}>Build Mine</button>
           <button onClick={() => {
-            fetch('http://localhost:8081/api', {
+            fetch('https://battle-of-the-kings-server.onrender.com/api', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ user_id: userId, action: 'buy_weapon', weapon: 'sword', platform: 'web' })
